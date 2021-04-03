@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	vlc "github.com/adrg/libvlc-go/v3"
 	"github.com/gotk3/gotk3/gdk"
@@ -360,14 +361,21 @@ lol
 		if d.state.slotID == 0 {
 			slot = "none"
 		}
+
+		dispTimecode := d.timeline.Timecode().String()
+		if len(dispTimecode) > 11 {
+			dispTimecode = dispTimecode[:11]
+		}
+		dispTimecode = strings.ReplaceAll(dispTimecode, ";", ":")
+
 		cmd.Parameters["status"] = d.timeline.TransportStatus()
 		cmd.Parameters["speed"] = d.timeline.TransportSpeed()                         // -1600 through 1600
 		cmd.Parameters["slot id"] = slot                                              // or none
 		cmd.Parameters["clip id"] = strconv.FormatUint(uint64(d.timeline.clipID), 10) // or none??!? (HDS Mini shows clip id: 1 even when the timeline is clear!)
 		cmd.Parameters["single clip"] = strconv.FormatBool(d.timeline.singleClip)
-		cmd.Parameters["display timecode"] = d.timeline.Timecode().String() // timecode on front of deck
-		cmd.Parameters["timecode"] = d.timeline.Timecode().String()         // timecode on timeline/playlist
-		cmd.Parameters["video format"] = "720p5994"
+		cmd.Parameters["display timecode"] = dispTimecode // timecode on front of deck
+		cmd.Parameters["timecode"] = dispTimecode         // timecode on timeline/playlist
+		cmd.Parameters["video format"] = deck.VideoFormat1080p60
 		cmd.Parameters["loop"] = strconv.FormatBool(d.state.loop)
 		cmd.Parameters["timeline"] = strconv.FormatInt(d.timeline.Timecode().Frame(), 10) // number of framess into timeline??
 		cmd.Parameters["input video format"] = "none"

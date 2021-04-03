@@ -114,7 +114,7 @@ func (t *TimelinePlayer) onEndReached(event vlc.Event, userData interface{}) {
 	}()
 }
 
-func (t *TimelinePlayer) Timecode() timecode.Timecode {
+func (t *TimelinePlayer) CurrentTimecode() timecode.Timecode {
 	clipTime, err := t.player.MediaTime()
 	if err != nil {
 		// If the media hasn't started yet, we're at zero
@@ -123,7 +123,22 @@ func (t *TimelinePlayer) Timecode() timecode.Timecode {
 		}
 		log.Fatal().Err(err).Msg("error getting media time")
 	}
-	return t.prevClipsDur.Add(time.Duration(clipTime) * time.Millisecond)
+	return timecode.New(time.Duration(clipTime)*time.Millisecond, t.rate)
+}
+
+func (t *TimelinePlayer) TimecodeUntilThisClip() timecode.Timecode {
+	totalTimecode := timecode.New(0, t.rate)
+	for clipID, clip := range t.clips {
+		if clipID >= (int(t.clipID) - 1) {
+			break
+		}
+		totalTimecode += clip.Duration
+	}
+	return totalTimecode
+}
+
+func (t *TimelinePlayer) Timecode() timecode.Timecode {
+	return t.TimecodeUntilThisClip() + t.CurrentTimecode()
 }
 
 // TransportStatus returns the current transport status:
