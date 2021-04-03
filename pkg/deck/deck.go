@@ -38,6 +38,7 @@ const (
 	VideoFormat1080p25    = "1080p25"
 	VideoFormat1080p2997  = "1080p2997"
 	VideoFormat1080p30    = "1080p30"
+	VideoFormat1080p60    = "1080p60"
 	VideoFormat1080i50    = "1080i50"
 	VideoFormat1080i5994  = "1080i5994"
 	VideoFormat1080i60    = "1080i60"

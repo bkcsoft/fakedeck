@@ -345,10 +345,10 @@ lol
 			Parameters: make(map[string]string, 0),
 		}
 		cmd.Parameters["slot id"] = strconv.FormatInt(slotID, 10)
-		cmd.Parameters["status"] = "mounted"                      // always mounted at this point; could be "empty"
-		cmd.Parameters["volume name"] = "Untitled"                // lol
-		cmd.Parameters["recording time"] = "0"                    // we don't record.
-		cmd.Parameters["video format"] = deck.VideoFormat720p5994 // should come from deck state, if we are going to be controlling the output resolution
+		cmd.Parameters["status"] = "mounted"                     // always mounted at this point; could be "empty"
+		cmd.Parameters["volume name"] = "Untitled"               // lol
+		cmd.Parameters["recording time"] = "0"                   // we don't record.
+		cmd.Parameters["video format"] = deck.VideoFormat1080p60 // should come from deck state, if we are going to be controlling the output resolution
 		cmd.Parameters["blocked"] = "false"
 
 		return cmd.Marshall()
