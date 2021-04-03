@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -42,6 +43,13 @@ type VLCDeck struct {
 
 const appID string = "com.jafrench.fakedeck.vlc_fakedeck"
 
+var basePath string = "/home/playout/slots"
+
+func init() {
+	flag.StringVar(&basePath, "basePath", "/home/playout/slots/", "[PATH] to where the slots are stored")
+	flag.Parse()
+}
+
 func VLCDeckNew() *VLCDeck {
 	C.XInitThreads()
 
@@ -61,7 +69,6 @@ func VLCDeckNew() *VLCDeck {
 	}
 
 	// Create slots
-	basePath := "/home/playout/slots/" // could come from os.Args or flags
 	slots := make([]*Slot, 0)
 	for slotID := uint(1); slotID <= 1; slotID++ {
 		slot, err := NewSlot(filepath.Join(basePath, fmt.Sprintf("%v/", slotID)))
