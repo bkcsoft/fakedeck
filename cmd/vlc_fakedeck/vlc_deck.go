@@ -46,8 +46,8 @@ const appID string = "com.jafrench.fakedeck.vlc_fakedeck"
 var basePath string = "/home/playout/slots"
 
 func init() {
-	flag.StringVar(&basePath, "basePath", "/home/playout/slots/", "[PATH] to where the slots are stored")
 	flag.Parse()
+	flag.StringVar(&basePath, "basePath", "/home/playout/slots/", "[PATH] to where the slots are stored")
 }
 
 func VLCDeckNew() *VLCDeck {
