@@ -41,7 +41,7 @@ type Rate struct {
 	dropFrames int
 	// Effective number of actual frames per 10 minute time interval. This is
 	// the same number as valid timecode address labels during that duration.
-	framesPer10Min int
+	framesPer10Min int64
 }
 
 // Standard edit rates for non-drop-frame timecodes.
@@ -122,7 +122,7 @@ func NewRate(n, d int) Rate {
 	fps := float32(n) / float32(d)
 	r := NewFloatRate(fps)
 	if r.enum == R_MAX {
-		return Rate{R_MAX, int(math.Ceil(float64(fps))), n, d, 0, int(fps * 600)}
+		return Rate{R_MAX, int(math.Ceil(float64(fps))), n, d, 0, int64(fps * 600)}
 	}
 	return r
 }
@@ -157,7 +157,7 @@ func NewFloatRate(f float32) Rate {
 	case f == 120:
 		return rates[R_120]
 	default:
-		return Rate{R_MAX, int(f), int(f * 1000), 1000, 0, int(f) * 600}
+		return Rate{R_MAX, int(f), int(f * 1000), 1000, 0, int64(f) * 600}
 	}
 }
 
