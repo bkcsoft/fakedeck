@@ -321,7 +321,7 @@ lol
 					log.Error().Err(err).Msg("error parsing clip id")
 					return protocol.ErrSyntax
 				}
-				err = d.timeline.PlayClip(uint(clipID))
+				err = d.timeline.SetClip(uint(clipID))
 				if err != nil {
 					log.Error().Err(err).Msgf("error playing clip id %v", clipID)
 					return protocol.ErrInternal
