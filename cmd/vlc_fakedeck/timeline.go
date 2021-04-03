@@ -177,6 +177,13 @@ func (t *TimelinePlayer) sendAsyncTransportInfo() {
 	}()
 }
 
+func (t *TimelinePlayer) SetClip(clipID uint) error {
+	t.player.SetMedia(t.GetClipByID(clipID).media)
+	t.player.SetMediaTime(0)
+	t.clipID = clipID
+	return nil
+}
+
 func (t *TimelinePlayer) PlayClip(clipID uint) error {
 	t.player.SetMedia(t.GetClipByID(clipID).media)
 	t.player.SetMediaTime(0)
