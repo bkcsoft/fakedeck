@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strconv"
 
@@ -42,15 +42,10 @@ type VLCDeck struct {
 
 const appID string = "com.jafrench.fakedeck.vlc_fakedeck"
 
-var slotPath string = "/home/playout/slots"
+var slotPath *string = flag.String("slotPath", "/home/playout/slots/", "path to where slots are stored")
 
 func init() {
-	if len(os.Args) <= 1 {
-		return
-	}
-	if p := os.Args[1]; p != "" {
-		slotPath = p
-	}
+	flag.Parse()
 }
 
 func VLCDeckNew() *VLCDeck {
@@ -74,7 +69,7 @@ func VLCDeckNew() *VLCDeck {
 	// Create slots
 	slots := make([]*Slot, 0)
 	for slotID := uint(1); slotID <= 1; slotID++ {
-		slot, err := NewSlot(filepath.Join(slotPath, fmt.Sprintf("%v/", slotID)))
+		slot, err := NewSlot(filepath.Join(*slotPath, fmt.Sprintf("%v/", slotID)))
 		if err != nil {
 			log.Fatal().Err(err).Msg("error making slot")
 		}
@@ -387,7 +382,7 @@ lol
 
 func (d *VLCDeck) PowerOn() {
 	d.server.Serve()
-	d.app.Run(os.Args)
+	d.app.Run(flag.Args())
 }
 
 func (d *VLCDeck) PowerOff() {
