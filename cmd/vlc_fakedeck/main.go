@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	log.Logger = zerolog.New(os.Stdout).Level(zerolog.DebugLevel).With().Timestamp().Logger()
+	log.Logger = zerolog.New(os.Stdout).Level(zerolog.InfoLevel).With().Timestamp().Logger()
 	d := VLCDeckNew()
 	d.PowerOn()
 }
