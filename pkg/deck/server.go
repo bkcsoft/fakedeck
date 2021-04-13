@@ -84,6 +84,7 @@ func (s *Server) Serve() {
 				}
 				if s.conn != nil {
 					s.conn.Close()
+					// s.Unlock()
 					s.conn = nil
 				}
 				s.clientIP = clientIP
@@ -122,7 +123,6 @@ func (s *Server) Serve() {
 					switch cmd.Name {
 					case "":
 						// empty command - ignore it
-						// s.Unlock()
 						continue
 					case "ping":
 						// Protocol level doesn't need to be processed by the deck
@@ -170,9 +170,14 @@ func (s *Server) Serve() {
 					log.Info().Msgf("responding with: %v", res)
 
 					toWrite := []byte(res + "\r\n")
-					s.Lock()
-					written, err := c.Write(toWrite)
-					s.Unlock()
+					sendMsg := func(s *Server, toWrite []byte) (int, error) {
+						s.Lock()
+						defer s.Unlock()
+						return c.Write(toWrite)
+					}
+
+					written, err := sendMsg(s, toWrite)
+
 					if err != nil {
 						log.Error().Err(err).Msg("error writing response")
 					}
